@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thaco Helper</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" crossorigin="anonymous">
+    <style>
+      .pre-child {
+        position: absolute;
+        top: -4px;
+        left: 2px;
+        width: 7px;
+        height: 23px;
+        border-left: 1px dotted #000;
+        border-bottom: 1px dotted #000;
+      }
+      li {
+        background-color: transparent !important;
+      }
+      .list-group-item {
+        padding: 3px 0 3px 10px;
+      }
+      span.name {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <li class="list-group-item border-0" style="display: none;" id="clone-dir-node">
+      <div class="pre-child"></div>
+      <i class="fa-solid fa-folder icon"></i>
+      <span onclick="nodeClick()" style="display: none;" class="name">Thư mục mới</span>
+      <input type="text" value="Thư mục mới" class="w-50 name" />
+      <i class="fa fa-check change-name-complete" onclick="changeNameComplete()"></i>
+
+      <i class="fa-solid fa-pen-to-square edit-name" onclick="editName()"></i>
+      <i class="fa-solid fa-file add-file" onclick="addNode(true)"></i>
+      <i class="fa-solid fa-folder-plus add-folder" onclick="addNode()"></i>
+      <i class="fa-solid fa-trash delete-foler" onclick="deleteNode()"></i>
+    </li>
+    <li class="list-group-item" style="display: none;" id="clone-file-node">
+      <div class="pre-child"></div>
+      <i class="fa-solid fa-file"></i>
+      <span class="name" onclick="fileClick()" style="display: none;">Tên tệp tin</span>
+      <input class="name" type="text" value="Tên tệp tin" class="w-50" />
+      <i class="fa fa-check change-name-complete" onclick="changeNameComplete()"></i>
+
+      <i class="fa-solid fa-pen-to-square edit-name"  onclick="editName()"></i>
+      <i class="fa-solid fa-trash delete-foler" onclick="deleteNode()"></i>
+    </li>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Menu bar -->
+        <div class="col-md-3">
+          <ul class="list-group">
+            <li class="list-group-item active">Danh mục</li>
+          </ul>
+          <div id="tree">
+            <ul class="list-group">
+            </ul>
+          </div>
+        </div>
+        <!-- content info -->
+        <div class="col-md-9">
+          <div id="editor-container">
+            <input type="hidden" id="file-id" />
+            <textarea id="editor">Viết nội dung vào đây...</textarea>
+            <button type="button" value="Lưu" class="btn btn-primary float-right" onclick="saveContent()">Lưu</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/26.0.0/classic/ckeditor.js"></script>
+    <script src="/js/app/services.js"></script>
+    <script src="/js/app/app.js"></script>
+  </body>
+</html>
