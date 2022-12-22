@@ -33,7 +33,12 @@ class AbsLogic {
         const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
         if (!isValidOperation) {
-            throw new Error("please insert include properties");
+            //throw new Error("please insert include properties");
+            for (let key in data) {
+                if (!allowedUpdates.includes(key)) {
+                    delete data[key];
+                }
+            }
         }
 
         let updateObj = await this.collect.findById(data._id);

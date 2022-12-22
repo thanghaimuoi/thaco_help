@@ -15,22 +15,30 @@ router.get('/api/category/childs', async (req, res) => {
 
 router.put('/api/category/add', async (req, res) => {
     let newCateogry = await CategoryLogic.insert(req.body);
-    res.send(newCateogry);
+    let tree = await CategoryLogic.getTree();
+    res.send(tree);
 });
 
 router.post('/api/category/update', async (req, res) => {
     let updateData = await CategoryLogic.update(req.body);
-    res.send(updateData);
+    let tree = await CategoryLogic.getTree();
+    res.send(tree);
 });
 
 router.delete('/api/category/delete/:id', async (req, res) => {
     await CategoryLogic.delete(req.params.id);
-    res.send('');
+    let tree = await CategoryLogic.getTree();
+    res.send(tree);
 });
 
 router.get('/api/category/file-content/:id', async (req, res) => {
     let fileContent = await CategoryLogic.getFileContent(req.params.id);
     res.send(fileContent);
+});
+
+router.get('/api/category/tree', async (req, res) => {
+    let tree = await CategoryLogic.getTree();
+    res.send(tree);
 });
 
 module.exports = router;

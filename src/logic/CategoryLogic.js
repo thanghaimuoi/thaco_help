@@ -6,6 +6,21 @@ class CategoryLogic extends AbsLogic {
         super(Category);
     }
 
+    getTree = async function(node = null) {
+        if (node == null) {
+            node = await Category.findOne({parentCategory: null});
+        }
+        node = node.toJSON();
+        const childs = await Category.find({parentCategory: node._id});
+        let nodeChilds = [];
+        for (const child of childs) {
+            let addChild = await this.getTree(child);
+            nodeChilds.push(addChild);
+        }
+        node.childs = nodeChilds;
+        return node;
+    }
+
     getChilds = async function(parentId = null) {
         if (!parentId) {
             return await Category.find({parentCategory: null});
