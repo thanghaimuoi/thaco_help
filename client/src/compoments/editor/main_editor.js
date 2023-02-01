@@ -4,6 +4,7 @@ import TreeEditor from './tree_editor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Service from '../../services/service';
+import Adapter from '../../services/Adapter';
 
 class MainEditor extends Component {
     constructor(props) {
@@ -44,6 +45,7 @@ class MainEditor extends Component {
                 </Grid>
                 <Grid item xs={9} sx={{flex: 1, padding: "10px"}}>
                     <CKEditor
+                        config={{ckfinder:{uploadUrl: "/upload"}}}
                         sx={{height: "100%"}}
                         editor={ ClassicEditor }
                         data={this.state.content}

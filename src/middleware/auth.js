@@ -1,28 +1,59 @@
-const logger = require('../utils/logger').loginLogger;
+const UserLogic = require('../logic/UserLogic');
 
-const adminAuth = async (req, res, next) => {
-    try {
-        if (!req.headers.cookie) {
-            logger.info('Đăng nhập admin : Không tìm thấy user');
-            res.redirect(`/dang-nhap?returnUrl=${req.originalUrl}`);
-            return;
+const authorizationConfigure = {
+    allowAll: ["/api/login", "/upload", "/uploads"],
+    admin: ["/api/admin*"]
+};
+
+const allowStatic = ['jpg', 'jpge', 'json', 'js', 'css', 'ico', 'html']
+
+const checkInList = (path, listPath) => {
+    for (const static of allowStatic) {
+        if (path.endsWith('.' + static)) {
+            return true;
         }
-        try {
-            if (req.session.user.email != "admin@vinahema.com.vn") {
-                logger.info('Đăng nhập admin : Không phải là tài khoản admin');
-                res.redirect("/dang-nhap");
-                return;
+    }
+    for (let cpath of listPath) {
+        if (cpath.endsWith("*")) {
+            return path.startsWith(cpath.replace("*", ""));
+        } if (cpath.startsWith("*")) {
+            return path.endsWith(cpath.replace("*", ""));
+        } else {
+            if (path == cpath) {
+                return true;
             }
-        } catch (error) {
-            logger.info('Đăng nhập admin : ' + error);
-            res.redirect(`/dang-nhap?returnUrl=${req.originalUrl}`);
+        }
+    }
+    return false;
+}
+
+const auth = async (req, res, next) => {
+    try {
+        if (checkInList(req.originalUrl, authorizationConfigure.allowAll)) {
+            next();
             return;
         }
-        next();
-    } catch (e) {
+        
+        let token = !req.header('Authorization')? null : req.header('Authorization').replace('Bearer ', '');
+        if (!token) {
+            token = req.cookies['token'];
+        }
+        const user = await UserLogic.findByToken(token);
+        if (!user) {
+            res.status(401).send({message: "Vui lòng đăng nhập"});
+            return;
+        }
+        if (!user.isAdmin && checkInList(req.originalUrl, authorizationConfigure.admin)) {
+            res.status(401).send({message: "Bạn không có quyền truy cập"});
+            return;
+        }
 
-        res.redirect("/dang-nhap");
+        req.token = token;
+        req.user = user;
+        next();
+    } catch (ex) {
+        res.status(401).send({message: "Không tìm thấy token"});
     }
 }
 
-module.exports = adminAuth
+module.exports = auth

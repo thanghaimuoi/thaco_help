@@ -26,12 +26,6 @@ class TreeEditor extends Component {
         deleteOpen: false,
         selectedItem: {},
     }
-
-    componentDidMount() {
-        Service.getTree().then((struct) => {
-            this.setState({struct});
-        });
-    }
     
     renderTree(root) {
         let id = root._id + "";
@@ -117,6 +111,20 @@ class TreeEditor extends Component {
                 this.openDialog(false);
             });
         }
+    }
+
+    componentDidMount = () => {
+        Service.getCurrentUser().then((user) => {
+            if (!user.isAdmin) {
+                window.location.href = Service.url;
+            } else {
+                Service.getTree().then((struct) => {
+                    this.setState({struct});
+                });
+            }
+        }).catch(ex => {
+            window.location.href = Service.url;
+        });
     }
 
     render() {
